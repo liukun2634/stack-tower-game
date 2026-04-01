@@ -6,6 +6,7 @@ import { calcOverlap } from './utils.js';
 
 const GAME_WIDTH = 480;
 const PERFECT_THRESHOLD = 0.95;
+const NEAR_PERFECT_THRESHOLD = 0.85;
 
 const MILESTONES = [
   { combo: 3, text: 'Nice!', bonus: 5 },
@@ -184,6 +185,7 @@ export class Game {
 
       const precision = overlap.overlapWidth / block.width;
       const isPerfect = precision >= PERFECT_THRESHOLD;
+      const isNearPerfect = !isPerfect && precision >= NEAR_PERFECT_THRESHOLD;
 
       if (isPerfect) {
         this.tower.addBlock(topBlock.x, topBlock.width);
@@ -212,9 +214,17 @@ export class Game {
         this.spawnDebris(debrisX, topY - BLOCK_HEIGHT / 2);
 
         this.tower.addBlock(overlap.overlapX, overlap.overlapWidth);
-        this.combo = 0;
-        this.score += 1;
-        this.spawnScorePopup(overlap.overlapX + overlap.overlapWidth / 2, topY, 1, false);
+
+        if (isNearPerfect) {
+          // Near perfect: keep combo (don't increment), 2 points
+          this.score += 2;
+          this.spawnScorePopup(overlap.overlapX + overlap.overlapWidth / 2, topY, 2, false);
+        } else {
+          // Normal landing: reset combo, 1 point
+          this.combo = 0;
+          this.score += 1;
+          this.spawnScorePopup(overlap.overlapX + overlap.overlapWidth / 2, topY, 1, false);
+        }
         this.audio.play('land');
       }
 
@@ -311,12 +321,13 @@ export class Game {
     this.renderer.drawBackground(cameraY);
     this.renderer.drawCraneBody();
 
+    // Draw rope/hook behind everything
     if (this.currentBlock && (this.state === State.SWINGING || this.state === State.DROPPING)) {
       const attach = this.currentBlock.getRopeAttachPoint();
       this.renderer.drawRopeAndHook(attach.x, attach.y, cameraY);
-      this.renderer.drawBlock(this.currentBlock, cameraY, this.activeBlockSkin);
     }
 
+    // Tower blocks
     for (let i = 0; i < this.tower.blocks.length; i++) {
       const block = this.tower.blocks[i];
       const skin = this.skins[i] || null;
@@ -325,6 +336,11 @@ export class Game {
 
     if (this.tower.blocks.length > 0) {
       this.renderer.drawRooftop(this.tower.getTopBlock(), cameraY);
+    }
+
+    // Current block drawn AFTER tower so it's visible in front during drop
+    if (this.currentBlock && (this.state === State.SWINGING || this.state === State.DROPPING)) {
+      this.renderer.drawBlock(this.currentBlock, cameraY, this.activeBlockSkin);
     }
 
     if (this.cutoffPiece) {

@@ -7,9 +7,12 @@
 html, body {
   width: 100%;
   height: 100%;
-  background: #1a1a2e;
+  background: #0f1923;
   overflow: hidden;
   touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #game-container {
@@ -18,11 +21,37 @@ html, body {
   align-items: center;
   width: 100%;
   height: 100%;
+  /* iPhone safe area padding */
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
 }
 
 #game-canvas {
   display: block;
   max-width: 480px;
+  max-height: 100%;
   width: 100%;
   height: auto;
+  aspect-ratio: 480 / 854;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+/* Desktop: constrain and add subtle shadow */
+@media (min-width: 481px) {
+  #game-canvas {
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+    max-height: calc(100vh - 32px);
+  }
+}
+
+/* Mobile landscape */
+@media (orientation: landscape) and (max-height: 500px) {
+  #game-canvas {
+    max-height: 100vh;
+    width: auto;
+  }
 }

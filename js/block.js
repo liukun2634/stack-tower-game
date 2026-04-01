@@ -1,5 +1,5 @@
 export const BLOCK_HEIGHT = 40;
-const GRAVITY = 0.5;
+const GRAVITY = 1.2;
 
 export class Block {
   constructor(x, y, width) {
@@ -36,7 +36,7 @@ export class Block {
   drop() {
     this.swinging = false;
     this.dropping = true;
-    this.velocityY = 0;
+    this.velocityY = 4;
   }
 
   land(x, width) {

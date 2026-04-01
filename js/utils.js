@@ -26,7 +26,7 @@ export function calcOverlap(block, target) {
   const overlapRight = Math.min(blockRight, targetRight);
   const overlapWidth = overlapRight - overlapLeft;
 
-  if (overlapWidth <= 0) return null;
+  if (overlapWidth < 12) return null;
 
   return { overlapX: overlapLeft, overlapWidth };
 }

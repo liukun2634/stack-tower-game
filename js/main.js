@@ -6,16 +6,38 @@ const ctx = canvas.getContext('2d');
 
 const GAME_WIDTH = 480;
 const GAME_HEIGHT = 854;
-const MUTE_BTN = { x: 422, y: 86, size: 44 };
+const MUTE_BTN = { x: 422, y: 26, size: 46 };
+
+let _lastDisplayW = 0;
+let _lastDisplayH = 0;
 
 function resizeCanvas() {
   const container = document.getElementById('game-container');
-  const maxWidth = Math.min(container.clientWidth, GAME_WIDTH);
-  const scale = maxWidth / GAME_WIDTH;
-  canvas.width = GAME_WIDTH;
-  canvas.height = GAME_HEIGHT;
-  canvas.style.width = maxWidth + 'px';
-  canvas.style.height = (GAME_HEIGHT * scale) + 'px';
+  const containerW = container.clientWidth;
+  const containerH = container.clientHeight;
+  const gameAspect = GAME_WIDTH / GAME_HEIGHT;
+  const containerAspect = containerW / containerH;
+
+  let displayW, displayH;
+  if (containerAspect > gameAspect) {
+    displayH = containerH;
+    displayW = Math.round(displayH * gameAspect);
+  } else {
+    displayW = Math.min(containerW, GAME_WIDTH);
+    displayH = Math.round(displayW / gameAspect);
+  }
+
+  // Only touch canvas if size actually changed
+  if (canvas.width !== GAME_WIDTH || canvas.height !== GAME_HEIGHT) {
+    canvas.width = GAME_WIDTH;
+    canvas.height = GAME_HEIGHT;
+  }
+  if (displayW !== _lastDisplayW || displayH !== _lastDisplayH) {
+    canvas.style.width = displayW + 'px';
+    canvas.style.height = displayH + 'px';
+    _lastDisplayW = displayW;
+    _lastDisplayH = displayH;
+  }
 }
 
 const audio = new AudioManager();
