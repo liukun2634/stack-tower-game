@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #1a1a2e;
+  overflow: hidden;
+  touch-action: none;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#game-canvas {
+  display: block;
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+}
