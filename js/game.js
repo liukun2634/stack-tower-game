@@ -214,14 +214,14 @@ export class Game {
         this.spawnDebris(debrisX, topY - BLOCK_HEIGHT / 2);
 
         this.tower.addBlock(overlap.overlapX, overlap.overlapWidth);
+        this.combo = 0;
 
         if (isNearPerfect) {
-          // Near perfect: keep combo (don't increment), 2 points
+          // Near perfect: 2 points for good precision
           this.score += 2;
           this.spawnScorePopup(overlap.overlapX + overlap.overlapWidth / 2, topY, 2, false);
         } else {
-          // Normal landing: reset combo, 1 point
-          this.combo = 0;
+          // Normal landing: 1 point
           this.score += 1;
           this.spawnScorePopup(overlap.overlapX + overlap.overlapWidth / 2, topY, 1, false);
         }

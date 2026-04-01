@@ -7,8 +7,51 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id="game-container">
-    <canvas id="game-canvas"></canvas>
+  <div id="game-wrapper">
+    <div id="panel-left" class="side-panel">
+      <div class="panel-content">
+        <h1 class="panel-title">Stack Tower</h1>
+        <p class="panel-subtitle">Build Higher</p>
+
+        <div class="panel-section">
+          <h2>Controls</h2>
+          <div class="control-row"><span class="key">Click</span> Drop block</div>
+          <div class="control-row"><span class="key">Space</span> Drop block</div>
+          <div class="control-row"><span class="key">M</span> Toggle mute</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="game-container">
+      <canvas id="game-canvas"></canvas>
+    </div>
+
+    <div id="panel-right" class="side-panel">
+      <div class="panel-content">
+        <div class="panel-section">
+          <h2>Scoring</h2>
+          <div class="score-rule">
+            <span class="rule-label perfect">Perfect</span>
+            <span class="rule-desc">&gt;95% &mdash; 3+ pts &amp; combo</span>
+          </div>
+          <div class="score-rule">
+            <span class="rule-label near">Near Perfect</span>
+            <span class="rule-desc">85-95% &mdash; 2 pts</span>
+          </div>
+          <div class="score-rule">
+            <span class="rule-label normal">Normal</span>
+            <span class="rule-desc">&lt;85% &mdash; 1 pt</span>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>Combos</h2>
+          <div class="milestone-row"><span class="milestone-num">x3</span> Nice! <span class="milestone-bonus">+5</span></div>
+          <div class="milestone-row"><span class="milestone-num">x5</span> Amazing! <span class="milestone-bonus">+10</span></div>
+          <div class="milestone-row"><span class="milestone-num">x10</span> Legendary! <span class="milestone-bonus">+20</span></div>
+        </div>
+      </div>
+    </div>
   </div>
   <script type="module" src="js/main.js"></script>
 </body>
