@@ -12,19 +12,34 @@ let _lastDisplayW = 0;
 let _lastDisplayH = 0;
 
 function resizeCanvas() {
-  const container = document.getElementById('game-container');
-  const containerW = container.clientWidth;
-  const containerH = container.clientHeight;
+  const availW = window.innerWidth;
+  const availH = window.innerHeight;
   const gameAspect = GAME_WIDTH / GAME_HEIGHT;
-  const containerAspect = containerW / containerH;
+
+  // On wide screens, side panels take space — estimate available canvas width
+  let canvasAreaW = availW;
+  if (availW >= 900) {
+    canvasAreaW = Math.min(480, availW - 320); // 160px per panel
+  }
+  if (availW >= 1100) {
+    canvasAreaW = Math.min(480, availW - 400); // 200px per panel
+  }
+  const canvasAreaH = availH;
+  const areaAspect = canvasAreaW / canvasAreaH;
 
   let displayW, displayH;
-  if (containerAspect > gameAspect) {
-    displayH = containerH;
+  if (areaAspect > gameAspect) {
+    displayH = canvasAreaH;
     displayW = Math.round(displayH * gameAspect);
   } else {
-    displayW = Math.min(containerW, GAME_WIDTH);
+    displayW = Math.min(canvasAreaW, GAME_WIDTH);
     displayH = Math.round(displayW / gameAspect);
+  }
+
+  // Clamp to max game resolution
+  if (displayW > GAME_WIDTH) {
+    displayW = GAME_WIDTH;
+    displayH = GAME_HEIGHT;
   }
 
   // Only touch canvas if size actually changed
